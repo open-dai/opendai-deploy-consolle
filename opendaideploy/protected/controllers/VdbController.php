@@ -236,6 +236,10 @@ class VdbController extends Controller
 	}
 	
 	public function actionDeploy($id){
+		// we need to call mcollective to send the command to deploy the vdb
+		// mcollective in turn will call this application to get the file
+		// this is due to the limitation of the deployment approach of JBoss that wants the file local
+		
 		$mco = new restmco('http://puppet.test.italy.cloudlabcsi.local:4567');
 		
 		$ret = $mco->call_agent('rpcutil', 'ping');
@@ -244,6 +248,21 @@ class VdbController extends Controller
 		echo print_r('result :'.$mco->result, true);
 		echo print_r('error :'.$mco->error_message, true);
 		echo print_r('error_code :'.$mco->error_code, true);
+		//curl -X POST -H 'content-type: application/json' -d '{"parameters":{"cli_pwd":"opendaiadmin","cli_user":"admin","url":"http://yum-repo.cloudlabcsi.eu/","artefact":"geoserver.war","msg":"test","mode":"domain","server_groups":"geo_group"}}' http://puppet.test.italy.cloudlabcsi.local:4567/mcollective/echo/deploy_url/; echo
+//[{"sender":"jbossvdbmaster","statuscode":0,"statusmsg":"OK","data":{"status":1,"err":"","msg":"./jboss-cli.sh -c --controller='10.1.1.43' --user=admin --password=opendaiadmin command='deploy /tmp/geoserver.war --server-groups=geo_group '","out":"'geoserver.war' already exists in the deployment repository (use --force to replace the existing content in the repository)."}}]
+// we need to remember that we have two calls that can go wrong: 1 mco; 2 the operation itself
+
+		if ($mco->error_code){
+			//we have error
+		}
+		$result = json_decode($mco->result);
+		echo print_r($result,true);
+		echo $result[0]->data->pong;
+		/*
+		if (){
+			
+		}
+		*/
 		Yii::app()->end();
 	}
 	
