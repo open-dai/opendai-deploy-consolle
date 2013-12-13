@@ -1,4 +1,6 @@
 <?php
+Yii::import('application.vendor.*');
+require_once 'restmco/restmco.class.php';
 
 class VdbController extends Controller
 {
@@ -234,6 +236,15 @@ class VdbController extends Controller
 	}
 	
 	public function actionDeploy($id){
+		$mco = new restmco('http://puppet.test.italy.cloudlabcsi.local:4567');
+		
+		$ret = $mco->call_agent('rpcutil', 'ping');
+		error_log(print_r($ret,true));
+		echo print_r('ret :'.$ret, true);
+		echo print_r('result :'.$mco->result, true);
+		echo print_r('error :'.$mco->error_message, true);
+		echo print_r('error_code :'.$mco->error_code, true);
+		Yii::app()->end();
 	}
 	
 	public function actionFile($id) {
