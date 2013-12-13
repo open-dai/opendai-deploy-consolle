@@ -88,7 +88,7 @@ $gridDataProvider = new CArrayDataProvider(array(
             </li>
             <li>
             	<span class="summary-icon">
-                	<img src="<?php echo $baseUrl ;?>/img/page_white_excel.png" width="36" height="36" alt="Open Quotes<">
+                	<img src="<?php echo $baseUrl ;?>/img/page_white_excel.png" width="36" height="36" alt="Open Quotes">
                 </span>
                 <span class="summary-number">53</span>
                 <span class="summary-title"> Open Quotes</span>
